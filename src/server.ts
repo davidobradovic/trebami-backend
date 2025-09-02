@@ -3,6 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import { testConnections } from './database';
+import { DatabaseSeeder } from './utils/databaseSeeder';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
@@ -129,8 +130,20 @@ app.use('*', (req, res) => {
 // Start server
 const startServer = async () => {
   try {
-    // Test database connections (commented out for now)
-    // await testConnections();
+    // Test database connections
+    console.log('🔍 Testing database connections...');
+    await testConnections();
+    
+    // Check if we should seed data
+    const shouldSeed = process.env.SEED_DATA === 'true' || process.env.NODE_ENV === 'development';
+    if (shouldSeed) {
+      console.log('🌱 Checking if database needs seeding...');
+      try {
+        await DatabaseSeeder.seedAll();
+      } catch (seedError) {
+        console.log('⚠️  Seeding failed or data already exists:', seedError.message);
+      }
+    }
     
     // Start server
     app.listen(PORT, () => {
@@ -138,7 +151,7 @@ const startServer = async () => {
       console.log(`📚 API Documentation: http://localhost:${PORT}/api-docs`);
       console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`⚠️  Database connections disabled - using mock data`);
+      console.log(`✅ Database connections established successfully`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);

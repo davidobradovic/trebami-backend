@@ -1,15 +1,14 @@
 import { DatabaseSeeder } from './databaseSeeder';
-import { testConnections } from '../database';
 
-async function main() {
+async function seed() {
   try {
     console.log('🚀 Starting database seeder...');
     
-    // Test database connections first
-    await testConnections();
+    // Initialize database seeder
+    const seeder = new DatabaseSeeder();
     
-    // Seed the database
-    await DatabaseSeeder.seedAll();
+    // Seed all data
+    await seeder.seedAll();
     
     console.log('🎉 Seeding completed successfully!');
     process.exit(0);
@@ -19,5 +18,4 @@ async function main() {
   }
 }
 
-// Run the seeder
-main();
+seed();

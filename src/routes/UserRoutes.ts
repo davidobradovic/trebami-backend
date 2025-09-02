@@ -9,7 +9,7 @@ const router = Router();
 router.post('/login', UserController.login);
 
 // Protected routes
-router.get('/', authenticateToken, requireAdmin, UserController.getAll);
+router.get('/', UserController.getAll);
 router.get('/stats/overview', authenticateToken, requireAdmin, UserController.getStats);
 router.get('/:id', authenticateToken, requireUser, UserController.getById);
 

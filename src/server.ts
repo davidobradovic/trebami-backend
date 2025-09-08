@@ -56,9 +56,7 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 // Middleware
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://yourdomain.com'] 
-    : ['http://localhost:3000', 'http://localhost:5173'],
+  origin: true, // Allow all origins
   credentials: true
 }));
 
@@ -141,7 +139,7 @@ const startServer = async () => {
       try {
         await DatabaseSeeder.seedAll();
       } catch (seedError) {
-        console.log('⚠️  Seeding failed or data already exists:', seedError.message);
+        console.log('⚠️  Seeding failed or data already exists:', seedError instanceof Error ? seedError.message : String(seedError));   
       }
     }
     

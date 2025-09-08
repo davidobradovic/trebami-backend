@@ -5,15 +5,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // MySQL Configuration (for existing data - categories, subcategories, users)
-export const sequelize = new Sequelize(
-  process.env.MYSQL_DATABASE || 'workerapp',
-  process.env.MYSQL_USERNAME || 'newuser',
-  process.env.MYSQL_PASSWORD || 'newpassword',
+export const sequelize = new Sequelize('workerapp', 'newuser', 'newpassword',
   {
-    host: process.env.MYSQL_HOST || '185.239.237.189',
-    port: parseInt(process.env.MYSQL_PORT || '3306'),
+    host: '127.0.0.1',
     dialect: 'mysql',
-    logging: process.env.NODE_ENV === 'development' ? console.log : false,
     pool: {
       max: 5,
       min: 0,

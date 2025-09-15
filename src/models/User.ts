@@ -18,6 +18,12 @@ export interface UserAttributes {
   phoneNumber?: string | null;
   profileImage?: string | null;
   lastLoginAt?: Date | null;
+  address?: string | null;
+  city?: string | null;
+  country?: string | null;
+  postalCode?: string | null;
+  dateOfBirth?: Date | null;
+  gender?: string | null;
 }
 
 type UserCreationAttributes = Optional<UserAttributes, 'id'>;
@@ -38,8 +44,14 @@ export class User extends Model<UserAttributes, UserCreationAttributes>
   public createdAt!: Date | null;
   public isActive!: boolean;
   public phoneNumber!: string | null;
-  public profileImage!: string | null;
+  public profileImage!: string | null;    
   public lastLoginAt!: Date | null;
+  public address!: string | null;
+  public city!: string | null;
+  public country!: string | null;
+  public postalCode!: string | null;
+  public dateOfBirth!: Date | null;
+  public gender!: string | null;
 }
 
 User.init(
@@ -60,6 +72,12 @@ User.init(
     phoneNumber: { type: DataTypes.STRING(20), allowNull: true },
     profileImage: { type: DataTypes.STRING(255), allowNull: true },
     lastLoginAt: { type: DataTypes.DATE, allowNull: true },
+    address: { type: DataTypes.STRING(255), allowNull: true },
+    city: { type: DataTypes.STRING(100), allowNull: true },
+    country: { type: DataTypes.STRING(100), allowNull: true },
+    postalCode: { type: DataTypes.STRING(20), allowNull: true },
+    dateOfBirth: { type: DataTypes.DATE, allowNull: true },
+    gender: { type: DataTypes.STRING(20), allowNull: true },
   },
   {
     sequelize,

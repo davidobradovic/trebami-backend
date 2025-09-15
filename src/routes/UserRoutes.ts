@@ -14,6 +14,7 @@ router.get('/stats/overview', authenticateToken, requireAdmin, UserController.ge
 router.get('/:id', authenticateToken, requireUser, UserController.getById);
 
 // Admin only routes
+router.get('/me', authenticateToken, UserController.getMe);
 router.post('/', authenticateToken, requireAdmin, validateUser, UserController.create);
 router.put('/:id', authenticateToken, requireAdmin, validateUser, UserController.update);
 router.delete('/:id', authenticateToken, requireAdmin, UserController.delete);

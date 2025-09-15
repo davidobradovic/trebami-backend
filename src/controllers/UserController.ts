@@ -82,10 +82,55 @@ export class UserController {
     }
   }
 
+  static async getMe(req: Request, res: Response): Promise<void> {
+    try {
+      const user = (req as any).user;
+
+      if (!user) {
+        res.status(401).json({ 
+          success: false, 
+          message: 'User not authenticated' 
+        });
+        return;
+      }
+
+      // Remove password from response
+      const userResponse = user.toJSON();
+      (userResponse as any).password = undefined;
+
+      res.json({
+        success: true,
+        data: userResponse
+      });
+    } catch (error) {
+      console.error('Error fetching current user:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Internal server error' 
+      });
+    }
+  }
+
   // Create new user
   static async create(req: Request, res: Response): Promise<void> {
     try {
-      const { fullName, email, password, role, phoneNumber, profileImage } = req.body;
+      const { 
+        fullName, 
+        email, 
+        password, 
+        role, 
+        phoneNumber, 
+        profileImage,
+        address,
+        city,
+        country,
+        postalCode,
+        dateOfBirth,
+        gender,
+        refferal,
+        usedRefferal,
+        isActive
+      } = req.body;
 
       // Check if user with same email already exists
       const existingUser = await User.findOne({ where: { email } });
@@ -108,7 +153,15 @@ export class UserController {
         role: role || 'user',
         phoneNumber,
         profileImage,
-        isActive: true,
+        address,
+        city,
+        country,
+        postalCode,
+        dateOfBirth,
+        gender,
+        refferal,
+        usedRefferal,
+        isActive: isActive !== undefined ? isActive : true,
         createdAt: new Date()
       });
 
@@ -134,7 +187,23 @@ export class UserController {
   static async update(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const { fullName, email, password, role, phoneNumber, profileImage, isActive } = req.body;
+      const { 
+        fullName, 
+        email, 
+        password, 
+        role, 
+        phoneNumber, 
+        profileImage, 
+        isActive,
+        address,
+        city,
+        country,
+        postalCode,
+        dateOfBirth,
+        gender,
+        refferal,
+        usedRefferal
+      } = req.body;
 
       const user = await User.findByPk(Number(id));
       if (!user) {
@@ -163,7 +232,15 @@ export class UserController {
         role: role !== undefined ? role : user.role,
         phoneNumber: phoneNumber !== undefined ? phoneNumber : user.phoneNumber,
         profileImage: profileImage !== undefined ? profileImage : user.profileImage,
-        isActive: isActive !== undefined ? isActive : user.isActive
+        isActive: isActive !== undefined ? isActive : user.isActive,
+        address: address !== undefined ? address : user.address,
+        city: city !== undefined ? city : user.city,
+        country: country !== undefined ? country : user.country,
+        postalCode: postalCode !== undefined ? postalCode : user.postalCode,
+        dateOfBirth: dateOfBirth !== undefined ? dateOfBirth : user.dateOfBirth,
+        gender: gender !== undefined ? gender : user.gender,
+        refferal: refferal !== undefined ? refferal : user.refferal,
+        usedRefferal: usedRefferal !== undefined ? usedRefferal : user.usedRefferal
       };
 
       // Hash password if it's being updated
